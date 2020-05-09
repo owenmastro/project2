@@ -1,20 +1,20 @@
 const chpConnection = require('../database/CHPConnection');
 
 // Controller that interacts with database to retrieve data.
-class stationController {
+class AudiDepartmentController {
     constructor() {
-        console.log('Station Controller Initialized!');
+        console.log('AudiDepartment Controller Initialized!');
     }
     
-    // Fetches all stations
-    async stations(ctx) {
-        console.log('Controller HIT: stationController::stations');
+    // Fetches all Audi Departments
+    async audi_departments(ctx) {
+        console.log('Controller HIT: AudiDepartmentController::audi_departments');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM station';
+            const query = 'SELECT * FROM audiDepartment';
             
             chpConnection.query(query, (err, res) => {
                 if(err) {
-                    reject(`Error querying CHP.station: ${err}`);
+                    reject(`Error querying CHP.audiDepartment: ${err}`);
                 }
                 
                 ctx.body = res;
@@ -29,16 +29,16 @@ class stationController {
             });
     }
 
-    // Fetches a single station
-    async singleStation(ctx) {
-        console.log('Controller HIT: stationController::singleStation');
+    // Fetches a single Audi Department
+    async audi_department(ctx) {
+        console.log('Controller HIT: AudiDepartmentController::audi_department');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM station WHERE stationID = ?;';
-            const ss = ctx.params.singleStation;
+            const query = 'SELECT * FROM audiDepartment WHERE dept_name = ?;';
+            const ad = ctx.params.audi_department;
             
             chpConnection.query({
                 sql: query,
-                values: [ss]
+                values: [ad]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -58,14 +58,14 @@ class stationController {
          });
     }
 
-    // Add a new station
-    async add_station(ctx, next) {
-        console.log('Controller HIT: stationController::add_station');
+    // Add a new Audi Department
+    async add_audiDepartment(ctx, next) {
+        console.log('Controller HIT: AudiDepartmentController::add_audiDepartment');
        return new Promise((resolve, reject) => {
-           const newS = ctx.request.body;
+           const newAD = ctx.request.body;
            chpConnection.query({
-               sql: 'INSERT INTO station(task, dept_name) VALUES (?, ?);',
-               values: [newS.task, newS.dept_name]
+               sql: 'INSERT INTO audiDepartment(dept_name, city, street, state) VALUES (?, ?, ?, ?);',
+               values: [newAD.dept_name, newAD.city, newAD.street, newAD.state]
            }, (err, res) => {
                if(err) {
                    reject(err);
@@ -85,20 +85,21 @@ class stationController {
        });
     }
 
-    // Update a station
-    async update_station(ctx, next) {
-        console.log('Controller HIT: stationController::update_station');
+    // Update an Audi Department
+    async update_audiDepartment(ctx, next) {
+        console.log('Controller HIT: AudiDepartmentController::update_audiDepartment');
         return new Promise((resolve, reject) => {
-            const s = ctx.request.body;
+            const ad = ctx.request.body;
             chpConnection.query({
                 sql: `
-                    UPDATE station 
+                    UPDATE audiDepartment 
                     SET 
-                        task = ?,
-                        dept_name = ?
-                    WHERE stationID = ?
+                        city = ?,
+                        street = ?,
+                        state = ?
+                    WHERE dept_name = ?
                     `,
-                values: [s.task, s.dept_name, ctx.params.singleStation]
+                values: [ad.city, ad.street, ad.state, ctx.params.audi_department]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -117,13 +118,13 @@ class stationController {
         });
     }
 
-    // Delete a station
-    async delete_station(ctx, next) {
-        console.log('Controller HIT: stationController::delete_station');
+    // Delete an Audi Department
+    async delete_audiDepartment(ctx, next) {
+        console.log('Controller HIT: AudiDepartmentController::delete_audiDepartment');
         return new Promise((resolve, reject) => {
             chpConnection.query({
-                sql: `DELETE FROM station WHERE stationID = ?;`,
-                values: [ctx.params.singleStation]
+                sql: `DELETE FROM audiDepartment WHERE dept_name = ?;`,
+                values: [ctx.params.audi_department]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -142,4 +143,4 @@ class stationController {
     }
 }
 
-module.exports = stationController;
+module.exports = AudiDepartmentController;

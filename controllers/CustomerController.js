@@ -1,14 +1,14 @@
 const chpConnection = require('../database/CHPConnection');
 
 // Controller that interacts with database to retrieve data.
-class customerController {
+class CustomerController {
     constructor() {
         console.log('Customer Controller Initialized!');
     }
     
     // Fetches all Customers
     async customers(ctx) {
-        console.log('Controller HIT: customerController::customers');
+        console.log('Controller HIT: CustomerController::customers');
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM customer';
             
@@ -31,7 +31,7 @@ class customerController {
 
     // Fetches a single customer
     async singleCustomer(ctx) {
-        console.log('Controller HIT: customerController::singleCustomer');
+        console.log('Controller HIT: CustomerController::singleCustomer');
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM customer WHERE customerID = ?;';
             const sc = ctx.params.singleCustomer;
@@ -60,7 +60,7 @@ class customerController {
 
     // Add a new customer
     async add_customer(ctx, next) {
-        console.log('Controller HIT: customerController::add_customer');
+        console.log('Controller HIT: CustomerController::add_customer');
        return new Promise((resolve, reject) => {
            const newC = ctx.request.body;
            chpConnection.query({
@@ -87,7 +87,7 @@ class customerController {
 
     // Update a customer
     async update_customer(ctx, next) {
-        console.log('Controller HIT: customerController::update_customer');
+        console.log('Controller HIT: CustomerController::update_customer');
         return new Promise((resolve, reject) => {
             const c = ctx.request.body;
             chpConnection.query({
@@ -122,7 +122,7 @@ class customerController {
 
     // Delete a customer
     async delete_customer(ctx, next) {
-        console.log('Controller HIT: customerController::delete_customer');
+        console.log('Controller HIT: CustomerController::delete_customer');
         return new Promise((resolve, reject) => {
             chpConnection.query({
                 sql: `DELETE FROM customer WHERE customerID = ?;`,
@@ -145,4 +145,4 @@ class customerController {
     }
 }
 
-module.exports = customerController;
+module.exports = CustomerController;

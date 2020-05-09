@@ -1,20 +1,20 @@
 const chpConnection = require('../database/CHPConnection');
 
 // Controller that interacts with database to retrieve data.
-class employeeController {
+class StationController {
     constructor() {
-        console.log('Employee Controller Initialized!');
+        console.log('Station Controller Initialized!');
     }
     
-    // Fetches all employees
-    async employees(ctx) {
-        console.log('Controller HIT: employeeController::employees');
+    // Fetches all stations
+    async stations(ctx) {
+        console.log('Controller HIT: StationController::stations');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM employee';
+            const query = 'SELECT * FROM station';
             
             chpConnection.query(query, (err, res) => {
                 if(err) {
-                    reject(`Error querying CHP.employee: ${err}`);
+                    reject(`Error querying CHP.station: ${err}`);
                 }
                 
                 ctx.body = res;
@@ -29,16 +29,16 @@ class employeeController {
             });
     }
 
-    // Fetches a single employee
-    async singleEmployee(ctx) {
-        console.log('Controller HIT: employeeController::singleEmployee');
+    // Fetches a single station
+    async singleStation(ctx) {
+        console.log('Controller HIT: StationController::singleStation');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM employee WHERE SSN = ?;';
-            const se = ctx.params.singleEmployee;
+            const query = 'SELECT * FROM station WHERE stationID = ?;';
+            const ss = ctx.params.singleStation;
             
             chpConnection.query({
                 sql: query,
-                values: [se]
+                values: [ss]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -58,14 +58,14 @@ class employeeController {
          });
     }
 
-    // Add a new employee
-    async add_employee(ctx, next) {
-        console.log('Controller HIT: employeeController::add_employee');
+    // Add a new station
+    async add_station(ctx, next) {
+        console.log('Controller HIT: StationController::add_station');
        return new Promise((resolve, reject) => {
-           const newE = ctx.request.body;
+           const newS = ctx.request.body;
            chpConnection.query({
-               sql: 'INSERT INTO employee(SSN, f_name, l_name, salary, teamNum, stationID, dept_name) VALUES (?, ?, ?, ?, ?, ?, ?);',
-               values: [newE.SSN, newE.f_name, newE.l_name, newE.salary, newE.teamNum, newE.stationID, newE.dept_name]
+               sql: 'INSERT INTO station(stationID, task, dept_name) VALUES (?, ?, ?);',
+               values: [newS.stationID, newS.task, newS.dept_name]
            }, (err, res) => {
                if(err) {
                    reject(err);
@@ -85,24 +85,20 @@ class employeeController {
        });
     }
 
-    // Update an employee
-    async update_employee(ctx, next) {
-        console.log('Controller HIT: employeeController::update_employee');
+    // Update a station
+    async update_station(ctx, next) {
+        console.log('Controller HIT: StationController::update_station');
         return new Promise((resolve, reject) => {
-            const e = ctx.request.body;
+            const s = ctx.request.body;
             chpConnection.query({
                 sql: `
-                    UPDATE employee 
+                    UPDATE station 
                     SET 
-                        f_name = ?,
-                        l_name = ?,
-                        salary = ?,
-                        teamNum = ?,
-                        stationID = ?,
+                        task = ?,
                         dept_name = ?
-                    WHERE SSN = ?
+                    WHERE stationID = ?
                     `,
-                values: [e.f_name, e.l_name, e.salary, e.teamNum, e.stationID, e.dept_name, ctx.params.singleEmployee]
+                values: [s.task, s.dept_name, ctx.params.singleStation]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -121,13 +117,13 @@ class employeeController {
         });
     }
 
-    // Delete an employee
-    async delete_employee(ctx, next) {
-        console.log('Controller HIT: employeeController::delete_employee');
+    // Delete a station
+    async delete_station(ctx, next) {
+        console.log('Controller HIT: StationController::delete_station');
         return new Promise((resolve, reject) => {
             chpConnection.query({
-                sql: `DELETE FROM employee WHERE SSN = ?;`,
-                values: [ctx.params.singleEmployee]
+                sql: `DELETE FROM station WHERE stationID = ?;`,
+                values: [ctx.params.singleStation]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -146,4 +142,4 @@ class employeeController {
     }
 }
 
-module.exports = employeeController;
+module.exports = StationController;

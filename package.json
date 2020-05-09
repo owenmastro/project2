@@ -1,15 +1,29 @@
 {
   "name": "project2api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Project 2 API",
   "main": "api.js",
   "scripts": {
     "run": "node api.js",
     "test": "nodemon api.js"
   },
-  "author": "",
+  "jshintConfig": {
+    "esversion": 10
+  },
+  "keywords": [
+    "project2",
+    "API"
+  ],
+  "author": "OM",
   "license": "ISC",
   "dependencies": {
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^8.0.8",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.3"
   }
 }

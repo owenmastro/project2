@@ -1,14 +1,14 @@
 const chpConnection = require('../database/CHPConnection');
 
 // Controller that interacts with database to retrieve data.
-class carController {
+class CarController {
     constructor() {
         console.log('Car Controller Initialized!');
     }
     
     // Fetches all cars
     async cars(ctx) {
-        console.log('Controller HIT: carController::cars');
+        console.log('Controller HIT: CarController::cars');
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM car';
             
@@ -31,7 +31,7 @@ class carController {
 
     // Fetches a single car
     async singleCar(ctx) {
-        console.log('Controller HIT: carController::singleCar');
+        console.log('Controller HIT: CarController::singleCar');
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM car WHERE tag_num = ?;';
             const c = ctx.params.singleCar;
@@ -60,7 +60,7 @@ class carController {
 
     // Add a new team
     async add_car(ctx, next) {
-        console.log('Controller HIT: carController::add_car');
+        console.log('Controller HIT: CarController::add_car');
        return new Promise((resolve, reject) => {
            const newC = ctx.request.body;
            chpConnection.query({
@@ -87,7 +87,7 @@ class carController {
 
     // Update a team
     async update_car(ctx, next) {
-        console.log('Controller HIT: carController::update_car');
+        console.log('Controller HIT: CarController::update_car');
         return new Promise((resolve, reject) => {
             const c = ctx.request.body;
             chpConnection.query({
@@ -119,7 +119,7 @@ class carController {
 
     // Delete a team
     async delete_car(ctx, next) {
-        console.log('Controller HIT: carController::delete_car');
+        console.log('Controller HIT: CarController::delete_car');
         return new Promise((resolve, reject) => {
             chpConnection.query({
                 sql: `DELETE FROM car WHERE tag_num = ?;`,
@@ -142,4 +142,4 @@ class carController {
     }
 }
 
-module.exports = carController;
+module.exports = CarController;

@@ -1,20 +1,20 @@
 const chpConnection = require('../database/CHPConnection');
 
 // Controller that interacts with database to retrieve data.
-class audiDepartmentController {
+class EmployeeController {
     constructor() {
-        console.log('audiDepartment Controller Initialized!');
+        console.log('Employee Controller Initialized!');
     }
     
-    // Fetches all Audi Departments
-    async audi_departments(ctx) {
-        console.log('Controller HIT: audiDepartmentController::audi_departments');
+    // Fetches all employees
+    async employees(ctx) {
+        console.log('Controller HIT: EmployeeController::employees');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM audiDepartment';
+            const query = 'SELECT * FROM employee';
             
             chpConnection.query(query, (err, res) => {
                 if(err) {
-                    reject(`Error querying CHP.audiDepartment: ${err}`);
+                    reject(`Error querying CHP.employee: ${err}`);
                 }
                 
                 ctx.body = res;
@@ -29,16 +29,16 @@ class audiDepartmentController {
             });
     }
 
-    // Fetches a single Audi Department
-    async audi_department(ctx) {
-        console.log('Controller HIT: audiDepartmentController::audi_department');
+    // Fetches a single employee
+    async singleEmployee(ctx) {
+        console.log('Controller HIT: EmployeeController::singleEmployee');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM audiDepartment WHERE dept_name = ?;';
-            const ad = ctx.params.audi_department;
+            const query = 'SELECT * FROM employee WHERE SSN = ?;';
+            const se = ctx.params.singleEmployee;
             
             chpConnection.query({
                 sql: query,
-                values: [ad]
+                values: [se]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -58,14 +58,14 @@ class audiDepartmentController {
          });
     }
 
-    // Add a new Audi Department
-    async add_audiDepartment(ctx, next) {
-        console.log('Controller HIT: audiDepartmentController::add_audiDepartment');
+    // Add a new employee
+    async add_employee(ctx, next) {
+        console.log('Controller HIT: EmployeeController::add_employee');
        return new Promise((resolve, reject) => {
-           const newAD = ctx.request.body;
+           const newE = ctx.request.body;
            chpConnection.query({
-               sql: 'INSERT INTO audiDepartment(dept_name, city, street, state) VALUES (?, ?, ?, ?);',
-               values: [newAD.dept_name, newAD.city, newAD.street, newAD.state]
+               sql: 'INSERT INTO employee(SSN, f_name, l_name, salary, teamNum, stationID, dept_name) VALUES (?, ?, ?, ?, ?, ?, ?);',
+               values: [newE.SSN, newE.f_name, newE.l_name, newE.salary, newE.teamNum, newE.stationID, newE.dept_name]
            }, (err, res) => {
                if(err) {
                    reject(err);
@@ -85,21 +85,24 @@ class audiDepartmentController {
        });
     }
 
-    // Update an Audi Department
-    async update_audiDepartment(ctx, next) {
-        console.log('Controller HIT: audiDepartmentController::update_audiDepartment');
+    // Update an employee
+    async update_employee(ctx, next) {
+        console.log('Controller HIT: EmployeeController::update_employee');
         return new Promise((resolve, reject) => {
-            const ad = ctx.request.body;
+            const e = ctx.request.body;
             chpConnection.query({
                 sql: `
-                    UPDATE audiDepartment 
+                    UPDATE employee 
                     SET 
-                        city = ?,
-                        street = ?,
-                        state = ?
-                    WHERE dept_name = ?
+                        f_name = ?,
+                        l_name = ?,
+                        salary = ?,
+                        teamNum = ?,
+                        stationID = ?,
+                        dept_name = ?
+                    WHERE SSN = ?
                     `,
-                values: [ad.city, ad.street, ad.state, ctx.params.audi_department]
+                values: [e.f_name, e.l_name, e.salary, e.teamNum, e.stationID, e.dept_name, ctx.params.singleEmployee]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -118,13 +121,13 @@ class audiDepartmentController {
         });
     }
 
-    // Delete an Audi Department
-    async delete_audiDepartment(ctx, next) {
-        console.log('Controller HIT: audiDepartmentController::delete_audiDepartment');
+    // Delete an employee
+    async delete_employee(ctx, next) {
+        console.log('Controller HIT: EmployeeController::delete_employee');
         return new Promise((resolve, reject) => {
             chpConnection.query({
-                sql: `DELETE FROM audiDepartment WHERE dept_name = ?;`,
-                values: [ctx.params.audi_department]
+                sql: `DELETE FROM employee WHERE SSN = ?;`,
+                values: [ctx.params.singleEmployee]
             }, (err, res) => {
                 if(err) {
                     reject(err);
@@ -143,4 +146,4 @@ class audiDepartmentController {
     }
 }
 
-module.exports = audiDepartmentController;
+module.exports = EmployeeController;
